@@ -1,0 +1,11 @@
+{
+  "headers": {
+    "X-Notice": "Contact spotlight+rickroll@joscomputing.space for abuse or pure memes. No harm intended."
+  },
+  "userAgentIncludes": [
+    "Discordbot",
+    "aiohttp",
+    "python-httpx",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 11.6; rv:92.0) Gecko/20100101 Firefox/92.0"
+  ]
+}
