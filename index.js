@@ -21,7 +21,7 @@ async function handleEvent(event) {
       }
     }
 
-    if (config.userAgentIncludes.some(function(v) { return event.request.headers.get("User-Agent").indexOf(v) >= 0 })){
+    if (url.pathname === "/images/ios.png" || config.userAgentIncludes.some(function(v) { return event.request.headers.get("User-Agent").indexOf(v) >= 0 })){
         options.mapRequestToAsset = handleRequest()
         response = await getAssetFromKV(event, options)
     } else {
