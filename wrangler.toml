@@ -7,6 +7,8 @@ compatibility_flags = []
 workers_dev = false
 compatibility_date = "2021-11-18"
 
+webpack_config = "webpack.config.js"
+
 # account_id is required if you have multiple accounts within single profile.
 # account_id = ""
 

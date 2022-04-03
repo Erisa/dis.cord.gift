@@ -17,10 +17,15 @@
   },
   "homepage": "https://github.com/Erisa/dis.cord.gift#readme",
   "devDependencies": {
+    "@sentry/webpack-plugin": "^1.18.4",
     "file-loader": "^6.2.0",
-    "url-loader": "^4.1.1"
+    "url-loader": "^4.1.1",
+    "webpack-sentry-plugin": "^2.0.3"
   },
   "dependencies": {
-    "@cloudflare/kv-asset-handler": "^0.2.0"
+    "@cloudflare/kv-asset-handler": "^0.2.0",
+    "@cloudflare/worker-sentry": "^1.0.0",
+    "@cloudflare/workers-honeycomb-logger": "^2.1.0",
+    "toucan-js": "^2.5.0"
   }
 }

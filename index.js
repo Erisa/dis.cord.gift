@@ -1,19 +1,25 @@
 import { getAssetFromKV, mapRequestToAsset } from '@cloudflare/kv-asset-handler'
+import Toucan from 'toucan-js';
+
 
 // gives detailed error output and bypasses cache
 const DEBUG = false
 
 const config = require('./config.json')
 
-addEventListener('fetch', event => {
-  event.respondWith(handleEvent(event))
-})
+addEventListener("fetch", (event) => {
+  const sentry = new Toucan({
+    dsn: SENTRY_DSN,
+    context: event, // Includes 'waitUntil', which is essential for Sentry logs to be delivered. Also includes 'request' -- no need to set it separately.
+    allowedHeaders: ['user-agent', 'CF-Connecting-IP', 'X-Forwarded-For', 'CF-RAY', 'CF-IPCountry', 'CF-Visitor', 'CF-Worker', 'Referer'],
+    allowedSearchParams: /(.*)/,
+  });
 
-async function handleEvent(event) {
-  let options = {}
-  let response
-  let url = new URL(event.request.url)
+  event.respondWith(handleEvent(event, sentry));
+});
 
+
+async function handleEvent(event, sentry) {
   try {
     if (DEBUG) {
       options.cacheControl = {
@@ -21,7 +27,15 @@ async function handleEvent(event) {
       }
     }
 
+    let options = {}
+    let response
+    let url = new URL(event.request.url)
+
     var useragent = event.request.headers.get("User-Agent") || ""
+
+    if (event.request.headers.get("test") == "test"){
+      intentionalerror();
+    }
 
     if (url.pathname === "/images/ios.png" || config.userAgentIncludes.some(function(v) { return useragent.indexOf(v) >= 0 })){
         options.mapRequestToAsset = handleRequest()
@@ -37,8 +51,12 @@ async function handleEvent(event) {
     return response
     
   } catch (e) {
-    if (DEBUG) {
-        return new Response(e.message || e.toString(), { status: 500 })
+    if (!DEBUG) {
+      sentry.captureException(e);
+      return new Response('Something went wrong', {
+        status: 500,
+        statusText: 'Internal Server Error',
+      });
     }
   }
 }
