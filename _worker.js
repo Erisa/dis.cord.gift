@@ -25,7 +25,10 @@ export default {
                 return env.ASSETS.fetch(request);
             } else {
                 url.pathname = "/embed"
-                return env.ASSETS.fetch(url);            
+                const req = new Request(url.toString(), {
+                    cf: request.cf
+                });
+                return env.ASSETS.fetch(req);            
             }
         }
     },
